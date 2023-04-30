@@ -110,6 +110,7 @@ class CAR:
   GENESIS_GV70_1ST_GEN = "GENESIS GV70 1ST GEN"
   GENESIS_G80 = "GENESIS G80 2017"
   GENESIS_G90 = "GENESIS G90 2017"
+  GENESIS_GV80 = "GENESIS GV80 2023"
 
 
 @dataclass
@@ -199,6 +200,7 @@ CAR_INFO: Dict[str, Optional[Union[HyundaiCarInfo, List[HyundaiCarInfo]]]] = {
   CAR.GENESIS_GV70_1ST_GEN: HyundaiCarInfo("Genesis GV70 2022-23", "All", harness=Harness.hyundai_l),
   CAR.GENESIS_G80: HyundaiCarInfo("Genesis G80 2017-19", "All", harness=Harness.hyundai_h),
   CAR.GENESIS_G90: HyundaiCarInfo("Genesis G90 2017-18", "All", harness=Harness.hyundai_c),
+  CAR.GENESIS_GV80: HyundaiCarInfo("Genesis GV80 2023", "All", harness=Harness.hyundai_m),
 }
 
 class Buttons:
@@ -1477,6 +1479,32 @@ FW_VERSIONS = {
       b'\xf1\x00JK1_ SCC FHCUP      1.00 1.02 99110-AR000         ',
     ],
   },
+    CAR.GENESIS_GV80: {
+    (Ecu.fwdCamera, 0x7c4, None): [
+      b'\xf1\x00JX1 MFC  AT USA LHD 1.00 1.02 99211-T6110 220513',
+    ],
+    (Ecu.fwdRadar, 0x7d0, None): [
+      b'\xf1\x8799110T6100\xf1\x00JX1_ SCC FHCUP      1.00 1.01 99110-T6100         ',
+      b'\xf1\x00JX1_ SCC FHCUP      1.00 1.01 99110-T6100         ',
+    ],
+    (Ecu.eps, 0x7d4, None): [
+      b'\xf1\x00JX1 MDPS R 1.00 1.06 56370-T6200 0715',
+    ],
+    (Ecu.transmission, 0x7e1, None): [
+      b'\xf1\x00PSBG2433  G16\x00\x00\x00\x00\x00\x00\x00SJX1T35XXXG16NB6\xa6Upc',
+      b'\xf1\x8795441-4JAC0\x00\xf1\x81G16\x00\x00\x00\x00\x00\x00\x00\xf1\x00PSBG2433  G16\x00\x00\x00\x00\x00\x00\x00SJX1T35XXXG16NB6\xa6Upc',
+      b'SJX1T35XXXG16NB6',
+      b'\xf1\x8795441-4JAC0\x00\xf1\x89G16\x00\x00\x00\x00\x00\x00\x00\xf1\x82SJX1T35XXXG16NB6',
+    ],
+    (Ecu.engine, 0x7e0, None): [
+      b'\xf1\x87           \xf1\x81 \x00\x00\x00\x00\x00\x00\x00\x00\x00\x00',
+      b'TJX-3NU0HF100M0K',
+      b'\xf1\x87           \xf1\x8908A02_23MY_001\x00\x00\xf1\x82TJX-3NU0HF100M0K',
+    ],
+    (Ecu.cornerRadar, 0x7b7, None): [
+      b'\xf1\x00JX1 BCW RR 1.00 , 1.00 (t\x94\x99"\x02q\x10y',
+    ],
+  },
 }
 
 CHECKSUM = {
@@ -1494,10 +1522,10 @@ FEATURES = {
   "use_fca": {CAR.SONATA, CAR.SONATA_HYBRID, CAR.ELANTRA, CAR.ELANTRA_2021, CAR.ELANTRA_HEV_2021, CAR.KIA_STINGER, CAR.IONIQ_EV_2020, CAR.IONIQ_PHEV, CAR.KONA_EV, CAR.KIA_FORTE, CAR.KIA_NIRO_EV, CAR.PALISADE, CAR.GENESIS_G70, CAR.GENESIS_G70_2020, CAR.KONA, CAR.SANTA_FE, CAR.KIA_SELTOS, CAR.KONA_HEV, CAR.SANTA_FE_2022, CAR.KIA_K5_2021, CAR.IONIQ_HEV_2022, CAR.SANTA_FE_HEV_2022, CAR.SANTA_FE_PHEV_2022, CAR.TUCSON, CAR.KONA_EV_2022, CAR.KIA_FORTE_2021_NON_SCC, CAR.ELANTRA_2022_NON_SCC},
 }
 
-CANFD_CAR = {CAR.KIA_EV6, CAR.IONIQ_5, CAR.TUCSON_HYBRID_4TH_GEN, CAR.KIA_SPORTAGE_HYBRID_5TH_GEN, CAR.SANTA_CRUZ_1ST_GEN, CAR.KIA_SPORTAGE_5TH_GEN, CAR.GENESIS_GV70_1ST_GEN}
+CANFD_CAR = {CAR.KIA_EV6, CAR.IONIQ_5, CAR.TUCSON_HYBRID_4TH_GEN, CAR.KIA_SPORTAGE_HYBRID_5TH_GEN, CAR.SANTA_CRUZ_1ST_GEN, CAR.KIA_SPORTAGE_5TH_GEN, CAR.GENESIS_GV70_1ST_GEN, CAR.GENESIS_GV80}
 
 # The radar does SCC on these cars when HDA I, rather than the camera
-CANFD_RADAR_SCC_CAR = {CAR.GENESIS_GV70_1ST_GEN, }
+CANFD_RADAR_SCC_CAR = {CAR.GENESIS_GV70_1ST_GEN, CAR.GENESIS_GV80}
 
 # The camera does SCC on these cars, rather than the radar
 CAMERA_SCC_CAR = {CAR.KONA_EV_2022, }
@@ -1564,6 +1592,7 @@ DBC = {
   CAR.KIA_SPORTAGE_5TH_GEN: dbc_dict('hyundai_canfd', None),
   CAR.KIA_SPORTAGE_HYBRID_5TH_GEN: dbc_dict('hyundai_canfd', None),
   CAR.GENESIS_GV70_1ST_GEN: dbc_dict('hyundai_canfd', None),
+  CAR.GENESIS_GV80: dbc_dict('hyundai_canfd', None),
 }
 
 
